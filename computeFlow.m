@@ -41,26 +41,13 @@ for i = 1:numel(X)
         ext = getExt(x, y);
         maxCorr = 0;
         maxXY = [0 0];
+
         % Search the window
-
-        if x <= Tr || y <= Tr ...
-           || x + Tr >= WX || y + Tr >= WY
-            WIN = [];
-        else
-            WIN = getWin(img1, x, y, [Tr Tr Tr Tr]);
-        end
-
         for x_ = max(1, x-Wr) : min(WX, x+Wr)
             for y_ = max(1, y-Wr) : min(WY, y+Wr)
-                if isempty(WIN) || x_ <= Tr || y_ <= Tr ...
-                   || x_ + Tr >= WX || y_ + Tr >= WY
-                    ext_ = min(ext, getExt(x_, y_));
-                    win = getWin(img1, x, y, ext_);
-                    win_ = getWin(img2, x_, y_, ext_);
-                else
-                    win = WIN;
-                    win_ = getWin(img2, x_, y_, [Tr Tr Tr Tr]);
-                end
+                ext_ = min(ext, getExt(x_, y_));
+                win = getWin(img1, x, y, ext_);
+                win_ = getWin(img2, x_, y_, ext_);
 
                 corr = corr2(win, win_);
                 % update the maximum so far
