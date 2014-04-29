@@ -33,7 +33,7 @@ function win = getWin(img, x, y, ext)
     win = img(y-ext(3):y+ext(4), x-ext(1):x+ext(2));
 end
 
-THRESH = WX/GX + WY/GY;
+THRESH = sqrt((WX/GX)^2 + (WY/GY)^2);
 vec = zeros(2, 1);
 for i = 1:numel(X) 
     for j = 1:numel(Y) 
@@ -54,8 +54,8 @@ for i = 1:numel(X)
         vec(2) = -search_ext(3) + maxY-1 - tmpl_ext(4);
 
         N = norm(vec);
-        if cval > 0.9 && N < THRESH * 1.5 ...
-            || N < THRESH * 2/3
+        if cval > 0.9 && N < THRESH * 1.8 ...
+            || N < THRESH * 1.3
             U(j, i) = vec(1);
             V(j, i) = vec(2);
         end

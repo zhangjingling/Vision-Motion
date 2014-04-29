@@ -63,7 +63,7 @@ end
 
 search_half_window_size = 15;   % Half size of the search window
 template_half_window_size = 10; % Half size of the template window 
-grid_MN = [32, 24];              % Number of rows and cols in the grid
+grid_MN = [48, 36];              % Number of rows and cols in the grid
 
 tic
 for i = 2:length(img_stack)
