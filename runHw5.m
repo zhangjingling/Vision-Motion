@@ -45,7 +45,7 @@ function debug1a()
 img1 = imread('simple1.png');
 img2 = imread('simple2.png');
 
-search_half_window_size = 15;   % Half size of the search window
+search_half_window_size = 10;   % Half size of the search window
 template_half_window_size = 4; % Half size of the template window
 grid_MN = [32, 24];              % Number of rows and cols in the grid
 
@@ -61,7 +61,7 @@ end
 
 search_half_window_size = 15;   % Half size of the search window
 template_half_window_size = 10; % Half size of the template window 
-grid_MN = [48, 32];              % Number of rows and cols in the grid
+grid_MN = [42, 30];              % Number of rows and cols in the grid
 
 for i = 2:length(img_stack)
     result = computeFlow(img_stack{i-1}, img_stack{i},...
@@ -81,19 +81,19 @@ function challenge2a
 %-------------------
 data_params.data_dir = 'walking_person';
 data_params.out_dir = 'walking_person_result';
-data_params.frame_ids = [1:20];
+data_params.frame_ids = [1:250];
 data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
 
 % ****** IMPORTANT ******
 % In your submission, replace the call to "chooseTarget" with actual parameters
 % to specify the target of interest
-tracking_params.rect = chooseTarget(data_params);
-% tracking_params.rect = [xmin ymin width height];
+% tracking_params.rect = chooseTarget(data_params);
+tracking_params.rect = [201 66 25 123];
 
 % Half size of the search window
-% tracking_params.search_half_window_size = ?;
+tracking_params.half_win = 4;
 % Number of bins in the color histogram
-% tracking_params.bin_n = ?;                    
+tracking_params.bin_n = 16; 
 
 % Pass the parameters to trackingTester (partial implementation below)
 trackingTester(data_params, tracking_params);
@@ -105,19 +105,21 @@ function challenge2b
 %-------------------
 data_params.data_dir = 'rolling_ball';
 data_params.out_dir = 'rolling_ball_result';
-data_params.frame_ids = [1:20];
+data_params.frame_ids = [1:250];
 data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
+
+tracking_params.reference = 7;
+tracking_params.rect_ref = [129 139 48 50];
 
 % ****** IMPORTANT ******
 % In your submission, replace the call to "chooseTarget" with actual parameters
 % to specify the target of interest
 tracking_params.rect = chooseTarget(data_params);
-% tracking_params.rect = [xmin ymin width height];
 
 % Half size of the search window
-% tracking_params.search_half_window_size = ?;
+tracking_params.half_win = 7;
 % Number of bins in the color histogram
-% tracking_params.bin_n = ?;           
+tracking_params.bin_n = 32; 
 
 % Pass the parameters to trackingTester (partial implementation below)
 trackingTester(data_params, tracking_params);
@@ -135,41 +137,12 @@ data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
 % ****** IMPORTANT ******
 % In your submission, replace the call to "chooseTarget" with actual parameters
 % to specify the target of interest
-tracking_params.rect = chooseTarget(data_params);
-% tracking_params.rect = [xmin ymin width height];
+tracking_params.rect = [484 198 52 130];
 
 % Half size of the search window
-% tracking_params.search_half_window_size = ?;
+tracking_params.half_win = 5;
 % Number of bins in the color histogram
-% tracking_params.bin_n = ?;           
+tracking_params.bin_n = 1024; 
 
 % Pass the parameters to trackingTester (partial implementation below)
 trackingTester(data_params, tracking_params);
-
-
-%%
-function rect = chooseTarget(data_params)
-% chooseTarget displays an image and asks the user to drag a rectangle
-% around a tracking target
-% 
-% arguments:
-% data_params: a structure contains data parameters
-% rect: [xmin ymin width height]
-
-% Reading the first frame from the focal stack
-img = imread(fullfile(data_params.data_dir,...
-    data_params.genFname(data_params.frame_ids(1))));
-
-% Pick an initial tracking location
-imshow(img);
-disp('===========');
-disp('Drag a rectangle around the tracking target: ');
-h = imrect;
-rect = round(h.getPosition);
-
-% To make things easier, let's make the height and width all odd
-if mod(rect(3), 2) == 0, rect(3) = rect(3) + 1; end
-if mod(rect(4), 2) == 0, rect(4) = rect(4) + 1; end
-str = mat2str(rect);
-disp(['[xmin ymin width height]  = ' str]);
-disp('===========');
