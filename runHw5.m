@@ -61,7 +61,7 @@ for i = 1:length(img_list)
     img_stack{i} = imread(img_list{i});
 end
 
-search_half_window_size = 20;   % Half size of the search window
+search_half_window_size = 15;   % Half size of the search window
 template_half_window_size = 10; % Half size of the template window 
 grid_MN = [32, 24];              % Number of rows and cols in the grid
 

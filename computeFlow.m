@@ -33,6 +33,7 @@ function win = getWin(img, x, y, ext)
     win = img(y-ext(3):y+ext(4), x-ext(1):x+ext(2));
 end
 
+THRESH = WX/GX + WY/GY;
 vec = zeros(2, 1);
 for i = 1:numel(X) 
     for j = 1:numel(Y) 
@@ -46,14 +47,15 @@ for i = 1:numel(X)
         search = getWin(img2, x, y, search_ext);
         corr = normxcorr2(tmpl, search);
         [cval, maxXY] = max(corr(:));
-        % Discard a low correlation
-        if cval < 0.5, continue, end
         [maxY maxX] = ind2sub(size(corr), maxXY);
 
         % Store the displacement to the velocity map
         vec(1) = -search_ext(1) + maxX-1 - tmpl_ext(2);
         vec(2) = -search_ext(3) + maxY-1 - tmpl_ext(4);
-        if norm(vec) < WX/GX + WY/GY
+
+        N = norm(vec);
+        if cval > 0.9 && N < THRESH * 1.5 ...
+            || N < THRESH * 2/3
             U(j, i) = vec(1);
             V(j, i) = vec(2);
         end
