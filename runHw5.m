@@ -59,9 +59,10 @@ for i = 1:length(img_list)
     img_stack{i} = imread(img_list{i});
 end
 
-search_half_window_size = 15;   % Half size of the search window
-template_half_window_size = 10; % Half size of the template window 
-grid_MN = [42, 30];              % Number of rows and cols in the grid
+%% 15, 20, [64, 48]
+search_half_window_size = 10;   % Half size of the search window
+template_half_window_size = 15; % Half size of the template window 
+grid_MN = [32, 24];              % Number of rows and cols in the grid
 
 for i = 2:length(img_stack)
     result = computeFlow(img_stack{i-1}, img_stack{i},...
@@ -81,7 +82,7 @@ function challenge2a
 %-------------------
 data_params.data_dir = 'walking_person';
 data_params.out_dir = 'walking_person_result';
-data_params.frame_ids = [1:250];
+data_params.frame_ids = 1:250;
 data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
 
 % ****** IMPORTANT ******
@@ -96,7 +97,7 @@ tracking_params.half_win = 4;
 tracking_params.bin_n = 16; 
 
 % Pass the parameters to trackingTester (partial implementation below)
-trackingTester(data_params, tracking_params);
+trackingTester(data_params, tracking_params, true);
 
 %%
 function challenge2b
@@ -105,24 +106,22 @@ function challenge2b
 %-------------------
 data_params.data_dir = 'rolling_ball';
 data_params.out_dir = 'rolling_ball_result';
-data_params.frame_ids = [1:250];
+data_params.frame_ids = 1:250;
 data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
-
-tracking_params.reference = 7;
-tracking_params.rect_ref = [129 139 48 50];
 
 % ****** IMPORTANT ******
 % In your submission, replace the call to "chooseTarget" with actual parameters
 % to specify the target of interest
-tracking_params.rect = chooseTarget(data_params);
+% tracking_params.rect = chooseTarget(data_params);
+tracking_params.rect = [159 134 33 39];
 
 % Half size of the search window
 tracking_params.half_win = 7;
 % Number of bins in the color histogram
-tracking_params.bin_n = 32; 
+tracking_params.bin_n = 24; 
 
 % Pass the parameters to trackingTester (partial implementation below)
-trackingTester(data_params, tracking_params);
+trackingTester(data_params, tracking_params, true);
 
 %%
 function challenge2c
@@ -131,18 +130,19 @@ function challenge2c
 %-------------------
 data_params.data_dir = 'basketball';
 data_params.out_dir = 'basketball_result';
-data_params.frame_ids = [1:20];
+data_params.frame_ids = 1:250;
 data_params.genFname = @(x)([sprintf('frame%d.png', x)]);
 
 % ****** IMPORTANT ******
 % In your submission, replace the call to "chooseTarget" with actual parameters
 % to specify the target of interest
-tracking_params.rect = [484 198 52 130];
+% tracking_params.rect = chooseTarget(data_params);
+tracking_params.rect = [318 240 22 65];
 
 % Half size of the search window
-tracking_params.half_win = 5;
+tracking_params.half_win = 6;
 % Number of bins in the color histogram
-tracking_params.bin_n = 1024; 
+tracking_params.bin_n = 16; 
 
 % Pass the parameters to trackingTester (partial implementation below)
-trackingTester(data_params, tracking_params);
+trackingTester(data_params, tracking_params, true);
