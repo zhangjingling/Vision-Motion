@@ -49,9 +49,7 @@ search_half_window_size = 15;   % Half size of the search window
 template_half_window_size = 4; % Half size of the template window
 grid_MN = [32, 24];              % Number of rows and cols in the grid
 
-tic
 result = computeFlow(img1, img2, search_half_window_size, template_half_window_size, grid_MN);
-toc
 imwrite(result, 'simpleresult.png');
 
 %%
@@ -63,15 +61,13 @@ end
 
 search_half_window_size = 15;   % Half size of the search window
 template_half_window_size = 10; % Half size of the template window 
-grid_MN = [48, 36];              % Number of rows and cols in the grid
+grid_MN = [48, 32];              % Number of rows and cols in the grid
 
-tic
 for i = 2:length(img_stack)
     result = computeFlow(img_stack{i-1}, img_stack{i},...
         search_half_window_size, template_half_window_size, grid_MN);
     imwrite(result, ['result' num2str(i-1) '_' num2str(i) '.png']);
 end
-toc
 %close all;
 
 %--------------------------------------------------------------------------

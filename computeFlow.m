@@ -15,11 +15,7 @@ Y = arrayfun(@(i) floor(WY/(2*GY) + WY/GY*i), 0:(GY-1));
 U = zeros(numel(Y), numel(X));
 V = zeros(numel(Y), numel(X));
 
-low = @(x) max(1, x - Wr);
-highx = @(x) min(WX, x + Wr);
-highy = @(y) min(WY, y + Wr);
-
-% Get the extension to all directions
+% Get the valid extension to all directions
 function ext = getExt(x, y, r)
     lx = min(x - 1, r);
     ly = min(y - 1, r);
@@ -33,7 +29,9 @@ function win = getWin(img, x, y, ext)
     win = img(y-ext(3):y+ext(4), x-ext(1):x+ext(2));
 end
 
+% Threshold the direction field length to reduce noise
 THRESH = sqrt((WX/GX)^2 + (WY/GY)^2);
+% displacement holder
 vec = zeros(2, 1);
 for i = 1:numel(X) 
     for j = 1:numel(Y) 
@@ -45,8 +43,12 @@ for i = 1:numel(X)
         % search window
         search_ext = getExt(x, y, Wr+Tr);
         search = getWin(img2, x, y, search_ext);
+
+        % Correlation search
         corr = normxcorr2(tmpl, search);
+        % cval stores the correlation strength, used for thresholding
         [cval, maxXY] = max(corr(:));
+        % locate the peak 
         [maxY maxX] = ind2sub(size(corr), maxXY);
 
         % Store the displacement to the velocity map
@@ -54,6 +56,7 @@ for i = 1:numel(X)
         vec(2) = -search_ext(3) + maxY-1 - tmpl_ext(4);
 
         N = norm(vec);
+        % empirical thresholding
         if cval > 0.9 && N < THRESH * 1.8 ...
             || N < THRESH * 1.3
             U(j, i) = vec(1);
@@ -62,9 +65,10 @@ for i = 1:numel(X)
     end
 end
 
-%% Generate the annotated image with quiver
+% Generate the annotated image with quiver
 [X Y] = meshgrid(X, Y);
 
+% Turn off autoscale to make certain arrows more visible
 fh = figure; imshow(img1), hold on, quiver(X, Y, U, V, 'autoscale', 'off');
 
 result = saveAnnotatedImg(fh);
