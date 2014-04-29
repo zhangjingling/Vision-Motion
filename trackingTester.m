@@ -15,24 +15,12 @@ saveImg = @(img, i, rect) ...
     imwrite(drawBox(img, rect, [255 0 0], 3), [data_params.out_dir '/' data_params.genFname(i)]);
 
 rect = tracking_params.rect;
-% get the refernence frame
-if (~isfield(tracking_params, 'reference'))
-    ref = 1;
-else
-    ref = tracking_params.reference;
-end
-
-if (~isfield(tracking_params, 'rect_ref'))
-    recf = rect;
-else
-    recf = tracking_params.rect_ref;
-end
 
 % Compute the histogram on the first image
-img_init = getImg(ref);
+img_init = getImg(1);
 
 % Get the sub-image that contains the target
-obj = img_init(recf(2):recf(2)+recf(4), recf(1):recf(1)+recf(3), :);
+obj = img_init(rect(2):rect(2)+rect(4), rect(1):rect(1)+rect(3), :);
 % Obtain the color map that will be used to generate histogram
 bin_n = tracking_params.bin_n;
 [obj map] = rgb2ind(obj, bin_n);
@@ -47,12 +35,11 @@ WY = size(img_init, 1);
 Wr = tracking_params.half_win;
 
 % paint the reference frame
-saveImg(img_init, ref, recf);
+saveImg(img_init, 1, rect);
 
 w = rect(3);
 h = rect(4);
-for i = data_params.frame_ids
-    if i == ref, continue, end
+for i = data_params.frame_ids(2:end)
     img = getImg(i);
     img_map = rgb2ind(img, map);
 
