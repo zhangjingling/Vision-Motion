@@ -1,9 +1,6 @@
-CV HW 5 
 Linxi Fan
-lf2422
 
 All the scripts run successfully in Matlab. 
-The codes are heavily commented for TA's convenience.
 
 =============== Challenge 1 ===============
 I use the function normxcorr2() to do the template matching. This can be
@@ -58,17 +55,3 @@ Note that the box I use is smaller than the bounding box that wraps the
 entire object. This makes the tracking much more robust. 
 In the "basketball" data set, the tracer does not lose its target when the two
 green players overlap (frame 177). 
-
-
-=============== Thank you ===============
-This is the last assignment of the semester. As is always the case in life,
-things always come to an end no matter how much fun I had. 
-
-To tell the truth, the Computer Vision class has been THE BEST course I've
-ever taken in the CS department. The coolest professor and the chillest TAs,
-unequivocally. I learned and enjoyed much more than I expected. 
-
-Thank you all for this wonderful experience. I will most likely pursue a career
-in computer vision, and CS4731 has marked an unforgettable beginning of a long and exciting journey. 
-
-See you soon. 
